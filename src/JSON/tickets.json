@@ -1,0 +1,43 @@
+[
+    {
+        "id" : 0,
+        "title" : "Function not implemented",
+        "owner" : 2,
+        "assignedTo" : 1,
+        "status" : "PROPOSED",
+        "description" : "Function getCallback() not implemented",
+        "date" : "01/05/2022",
+        "category" : "Development"
+    },
+    {
+        "id": 1,
+        "title": "Design missing",
+        "owner": 3,
+        "assignedTo": 4,
+        "status": "PROPOSED",
+        "description": "The design for the registration form is missing",
+        "date": "05/05/2022",
+        "category": "Design"
+    },
+    {
+        "id": 2,
+        "title": "Merge conflict 0.5 - 0.6",
+        "owner": 1,
+        "assignedTo": 2,
+        "status": "IN_PROGRESS",
+        "description": "Merge conflicts between v0.5 and v0.6",
+        "date": "07/05/2022",
+        "category": "Development"
+    },
+    {
+        "id": 3,
+        "title": "default case missing",
+        "owner": 2,
+        "assignedTo": -1,
+        "status": "ON_HOLD",
+        "description": "Default case missing in switch case",
+        "date": "12/05/2022",
+        "category": "Development"
+    }
+
+]
