@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { topStats } from './interface/mainDashboard';
 import ticketData from "../JSON/tickets.json";
 import { Tickets } from './interface/tickets';
 import { TicketState } from './enum/ticketState.enum';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Users as UserInterface } from './interface/usersResponse';
+import { UserService } from './service/users.service';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +15,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+
+  constructor(private userService: UserService) { }
 
   title:string = 'tickets-manager-dashboard';
 
@@ -25,9 +30,26 @@ export class AppComponent implements OnInit {
   //main dashboard elements
   mainDashboardTopStats : topStats[] = []
 
+  //users
+  users$?: Observable<UserInterface[] | UserInterface>
+
   //tickets
   tickets = new BehaviorSubject<Tickets[]>(ticketData)
   tickets$ = this.tickets.asObservable()
+
+  //fetch users
+  fetchUsers(): void {
+    this.users$ = this.userService.users$
+      .pipe(
+        map(response => {
+          return {...response}
+        }),
+        catchError((error: string) => {
+          console.log(error)
+          return of(this.dummyUser)
+        })
+      )
+  }
 
   //fill the top stats from main page
   fillTopStats(): void {
@@ -113,6 +135,9 @@ export class AppComponent implements OnInit {
     //seconds to delay for
     let timeLeft: number = 1
 
+    //fetch all users
+    this.fetchUsers()
+
     //fill top stats
     this.fillTopStats()
 
@@ -154,6 +179,31 @@ export class AppComponent implements OnInit {
     if(title.length > 21)
       return title.substring(0, 21) + "..."
     else return title
+  }
+
+  //dummy user if fetch fails
+  private readonly dummyUser: UserInterface = {
+    id: 1,
+    name: "John Doe",
+    username: "Dummy",
+    email: "dummy@placeholder.io",
+    address: {
+      street: "Jane Doe",
+      suite: "Apt. 0",
+      city: "Dummytown",
+      zipcode: "000000",
+      geo: {
+        lat: "0",
+        lng: "0"
+      }
+    },
+    phone: "0000000000",
+    website: "dummy.io",
+    company: {
+    name: "BestComp",
+      catchPhrase: "We are just a dummy",
+      bs: "I don't know what to put here"
+    }
   }
 
   //
